@@ -6,7 +6,7 @@ import { Canvas, useFrame } from "@react-three/fiber"; import { Stars, Sphere } 
 
 const mskTime = 19;
 
-const DigitalGlobe = () => {
+const Scene = () => {
   const [users, setUsers] = useState(Array(50).fill(0).map(() => ({
     x: Math.random() * 2 - 1,
     y: Math.random() * 2 - 1,
@@ -53,40 +53,48 @@ const DigitalGlobe = () => {
   });
 
   return (
-    <Canvas camera={{ position: [0, 0, 5] }} style={{ width: '100vw', height: '100vh' }}>
-      <div className="relative w-full h-screen bg-background flex items-center justify-center overflow-hidden">
-        
-          <ambientLight intensity={0.1} />
-          <pointLight position={[10, 10, 10]} />
-          <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade={true} />
+    <>
+      <ambientLight intensity={0.1} />
+      <pointLight position={[10, 10, 10]} />
+      <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade={true} />
 
-          {isTransforming ? (
-            <Sphere ref={earthRef} args={[1, 32, 32]} position={[0, 0, 0]}>
-              <meshStandardMaterial color="#7DF9FF" emissive="#7DF9FF" wireframe={true} />
-            </Sphere>
-          ) : (
-            <Sphere ref={earthRef} args={[1, 32, 32]} position={[0, 0, 0]}>
-              <meshStandardMaterial color="gray" />
-            </Sphere>
-          )}
+      {isTransforming ? (
+        <Sphere ref={earthRef} args={[1, 32, 32]} position={[0, 0, 0]}>
+          <meshStandardMaterial color="#7DF9FF" emissive="#7DF9FF" wireframe={true} />
+        </Sphere>
+      ) : (
+        <Sphere ref={earthRef} args={[1, 32, 32]} position={[0, 0, 0]}>
+          <meshStandardMaterial color="gray" />
+        </Sphere>
+      )}
 
-          {users.map((user, index) => (
-            <mesh key={index} position={[user.x, user.y, user.z]}>
-              <sphereGeometry args={[0.02, 32, 32]} />
-              <meshBasicMaterial color={selectedUsers.includes(user.username) ? "#9D00FF" : "#7DF9FF"} />
-            </mesh>
-          ))}
-        
+      {users.map((user, index) => (
+        <mesh key={index} position={[user.x, user.y, user.z]}>
+          <sphereGeometry args={[0.02, 32, 32]} />
+          <meshBasicMaterial color={selectedUsers.includes(user.username) ? "#9D00FF" : "#7DF9FF"} />
+        </mesh>
+      ))}
+    </>
+  );
+};
 
-        {selectedUsers.length > 0 && (
-          <div className="absolute bottom-10 left-0 w-full flex items-center justify-center">
-            <div className="bg-accent text-accent-foreground rounded-full px-6 py-3 shadow-lg">
-              Selected Users: {selectedUsers.join(", ")}
-            </div>
+const DigitalGlobe = () => {
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+
+  return (
+    <div className="relative w-full h-screen bg-background flex items-center justify-center overflow-hidden">
+      <Canvas camera={{ position: [0, 0, 5] }} style={{ width: '100vw', height: '100vh' }}>
+        <Scene />
+      </Canvas>
+
+      {selectedUsers.length > 0 && (
+        <div className="absolute bottom-10 left-0 w-full flex items-center justify-center">
+          <div className="bg-accent text-accent-foreground rounded-full px-6 py-3 shadow-lg">
+            Selected Users: {selectedUsers.join(", ")}
           </div>
-        )}
-      </div>
-    </Canvas>
+        </div>
+      )}
+    </div>
   );
 }
 
