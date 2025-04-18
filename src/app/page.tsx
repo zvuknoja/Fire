@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import * as THREE from 'three';
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Stars, Sphere, PointLight, AmbientLight } from "@react-three/drei";
+import { Stars, Sphere, PointLight, AmbientLight } from '@react-three/drei';
 
 const mskTime = 19;
 
